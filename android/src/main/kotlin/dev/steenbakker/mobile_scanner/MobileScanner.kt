@@ -97,6 +97,9 @@ class MobileScanner(private val activity: Activity, private val textureRegistry:
         ActivityCompat.requestPermissions(activity, permissions, REQUEST_CODE)
     }
 
+    fun getPermissionListener(): PluginRegistry.RequestPermissionsResultListener? {
+        return listener
+    }
 
     @ExperimentalGetImage
     val analyzer = ImageAnalysis.Analyzer { imageProxy -> // YUV_420_888 format
@@ -124,7 +127,7 @@ class MobileScanner(private val activity: Activity, private val textureRegistry:
 
     @ExperimentalGetImage
     private fun start(call: MethodCall, result: MethodChannel.Result) {
-        if (camera?.cameraInfo != null && preview != null && textureEntry != null) {
+        if (camera?.cameraInfo != null && preview?.resolutionInfo != null && textureEntry != null) {
             val resolution = preview!!.resolutionInfo!!.resolution
             val portrait = camera!!.cameraInfo.sensorRotationDegrees % 180 == 0
             val width = resolution.width.toDouble()
@@ -212,7 +215,7 @@ class MobileScanner(private val activity: Activity, private val textureRegistry:
                 // Enable torch if provided
                 camera!!.cameraControl.enableTorch(torch)
 
-                val resolution = preview!!.resolutionInfo!!.resolution
+                val resolution = preview!!.resolutionInfo?.resolution ?: Size(0, 0)
                 val portrait = camera!!.cameraInfo.sensorRotationDegrees % 180 == 0
                 val width = resolution.width.toDouble()
                 val height = resolution.height.toDouble()
