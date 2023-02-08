@@ -97,6 +97,9 @@ class MobileScanner(private val activity: Activity, private val textureRegistry:
         ActivityCompat.requestPermissions(activity, permissions, REQUEST_CODE)
     }
 
+    fun getPermissionListener(): PluginRegistry.RequestPermissionsResultListener? {
+        return listener
+    }
 
     @ExperimentalGetImage
     val analyzer = ImageAnalysis.Analyzer { imageProxy -> // YUV_420_888 format
