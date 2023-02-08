@@ -38,8 +38,9 @@ class MobileScannerPlugin : FlutterPlugin, ActivityAware {
     }
 
     override fun onDetachedFromActivity() {
-        if (activity != null && handler != null) {
-            activity!!.removeRequestPermissionsResultListener(handler!!)
+        val listener = handler?.getPermissionListener()
+        if (activity != null && listener != null) {
+            activity!!.removeRequestPermissionsResultListener(listener)
         }
         event?.setStreamHandler(null)
         method?.setMethodCallHandler(null)
